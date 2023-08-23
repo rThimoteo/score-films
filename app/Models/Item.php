@@ -10,7 +10,9 @@ class Item extends Model
         'name',
         'description',
         'img_url',
-        'banner_url'
+        'banner_url',
+        'type_id',
+        'year'
     ];
 
     public function type()

@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Item\EditItem;
+use App\Livewire\Item\CreateItem;
+use App\Livewire\Item\ShowItem;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Main;
 
@@ -15,3 +18,9 @@ use App\Livewire\Main;
 */
 
 Route::get('/', Main::class);
+
+Route::get('/create-item', CreateItem::class);
+
+Route::get('/items/{id}', ShowItem::class);
+
+Route::get('/items/{id}/edit', EditItem::class);

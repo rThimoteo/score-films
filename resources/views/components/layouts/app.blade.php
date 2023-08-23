@@ -19,15 +19,21 @@
 </head>
 
 <body class="bg-zinc-900">
-    <nav class="flex justify-start gap-5 bg-gradient-to-b from-zinc-950 from-50% pt-2 pb-3 text-gray-300 px-2">
-        <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300"
-            href="/" wire:navigate>Todos</a>
-        <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300"
-            href="/filmes" wire:navigate>Filmes</a>
-        <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300"
-            href="/series" wire:navigate>Séries</a>
-        <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300"
-            href="/jogos" wire:navigate>Jogos</a>
+    <nav class="flex justify-between bg-gradient-to-b from-zinc-950 from-50% pt-2 pb-3 text-gray-300 px-2">
+        <div class="flex gap-5">
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/"
+                wire:navigate>Todos</a>
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/filmes"
+                wire:navigate>Filmes</a>
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/series"
+                wire:navigate>Séries</a>
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/jogos"
+                wire:navigate>Jogos</a>
+        </div>
+        <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300" href="/create-item" wire:navigate>
+            <x-fas-plus class="w-4"/>
+            <span class="">Adicionar</span>
+        </a>
     </nav>
     {{ $slot }}
 </body>
