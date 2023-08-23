@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Livewire\Item\EditItem;
 use App\Livewire\Item\CreateItem;
 use App\Livewire\Item\ShowItem;
@@ -17,10 +18,18 @@ use App\Livewire\Main;
 |
 */
 
-Route::get('/', Main::class);
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-Route::get('/create-item', CreateItem::class);
+Route::middleware('auth')->group(function () {
 
-Route::get('/items/{id}', ShowItem::class);
+  Route::get('/', Main::class);
 
-Route::get('/items/{id}/edit', EditItem::class);
+  Route::get('/create-item', CreateItem::class);
+
+  Route::get('/items/{id}', ShowItem::class);
+
+  Route::get('/items/{id}/edit', EditItem::class);
+
+  Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');
+});

@@ -30,10 +30,19 @@
             <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/jogos"
                 wire:navigate>Jogos</a>
         </div>
-        <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300" href="/create-item" wire:navigate>
-            <x-fas-plus class="w-4"/>
-            <span class="">Adicionar</span>
-        </a>
+        <div class="flex items-center gap-3">
+            <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300"
+                href="/create-item" wire:navigate>
+                <x-fas-plus class="w-4" />
+                <span class="">Adicionar</span>
+            </a>
+            @auth
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="nav-link btn btn-link">Logout</button>
+                </form>
+            @endauth
+        </div>
     </nav>
     {{ $slot }}
 </body>
