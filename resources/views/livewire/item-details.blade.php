@@ -1,21 +1,45 @@
 <div class="flex flex-col items-center justify-center m-auto">
-    <div class="max-w-3xl bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="lg:w-10/12 w-full bg-white shadow-md rounded-lg overflow-hidden">
         <div class="relative">
             <div class="h-64 bg-cover bg-center" style="background-image: url('{{ $item->banner_url }}')"></div>
-            <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                <img src="{{ $item->img_url }}" alt="Imagem do Item"
-                    class="w-32 h-32 object-cover rounded-full border-4 border-white">
+            <div class="absolute left-0 bottom-0 right-0 top-0 flex items-center justify-center">
+                <img src="{{ $item->img_url }}" alt="Sem Imagem"
+                    class="w-32 object-cover border-2 rounded-md border-white">
             </div>
         </div>
-        <div class="p-8">
-            <h2 class="text-3xl font-bold mb-2">{{ $item->name }}</h2>
-            @if ($item->year)
-                <p class="text-sm text-gray-600 mb-4">({{ $item->year }})</p>
-            @endif
-            <p class="text-gray-600 mb-4">{{ $item->description }}</p>
-            <p class="text-gray-600 mb-4">Tipo: {{ $item->type->name }}</p>
-            <!-- Outras informações do item aqui -->
+        <div class="flex flex-row">
+            <div class="flex flex-col basis-1/2 p-8">
+                <h2 class="text-3xl font-bold mb-2">{{ $item->name }}</h2>
+                <p class="text-gray-600 mb-3">{{ $item->type->name }} @if ($item->year)
+                        - ({{ $item->year }})
+                    @endif
+                </p>
+                <p class="text-gray-600 mb-3">{{ $item->description }}</p>
+
+                <div class="flex justify-center gap-3">
+                    <a href="/items/{{ $item['id'] }}/edit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</a>
+                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" id="delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" onclick="confirmDelete()"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Excluir</button>
+                    </form>
+                </div>
+            </div>
+            <div class="flex flex-col basis-1/2 p-8">
+                <livewire:rating :score="$item->score" />
+            </div>
         </div>
-        <a href="/items/{{ $item['id'] }}/edit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</a>
     </div>
 </div>
+
+<script>
+    function confirmDelete() {
+        if (confirm('Tem certeza que deseja excluir este item?')) {
+            document.getElementById('delete-form').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
+</script>
