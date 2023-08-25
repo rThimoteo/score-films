@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="flex flex-col basis-1/2 p-8">
-                <livewire:rating :score="$item->score" />
+                <livewire:rating :itemid="$item->id" />
             </div>
         </div>
     </div>

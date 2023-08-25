@@ -2,34 +2,52 @@
 
 namespace App\Livewire;
 
+use App\Models\Item;
 use App\Models\Status;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Rating extends Component
 {
-    public $score;
-    public $temp_score;
-    public $comment;
-    public $date;
-    public $status_id = '';
+    public $item_id;
+    public $score = 0;
+    public $temp_score = 0;
+    public $comment = '';
+    public $date = '';
+    public $status_id = 1;
 
-    public function mount($item = ['score' => 0, 'comment' => '', 'date' => null])
+    public function mount($itemid = 0)
     {
-        if (!$item['date']) {
-            $item['date'] = Carbon::now()->format('d/m/Y');
+        $data = DB::table('user_item')
+            ->select('user_item.*')
+            ->where('item_id', $itemid)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        $this->item_id = $itemid;
+        logger($data->date);
+        if ($data) {
+            if ($data->date) {
+                $this->date = $data->date;
+            }
+            if ($data->status_id) {
+                $this->status_id = $data->status_id;
+            }
+            if ($data->score) {
+                $this->score = $data->score;
+            }
+            if ($data->comment) {
+                $this->comment = $data->comment;
+            }
+        } else {
+            $this->date = Carbon::now()->format('d/m/Y');
         }
-        $this->score = $item['score'];
-        $this->comment = $item['comment'];
-        $this->date = $item['date'];
     }
 
     public function rate($rating)
     {
         $this->score = $rating;
-
-        // Salve a nota na tabela user_item aqui
-        // Exemplo: auth()->user()->items()->updateExistingPivot($itemId, ['score' => $rating]);
     }
 
     public function highlight($rating)
@@ -47,5 +65,14 @@ class Rating extends Component
         return view('livewire.rating', [
             'options' => Status::all()
         ]);
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'score' => 'required',
+        ]);
+
+        auth()->user()->items()->sync([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
     }
 }

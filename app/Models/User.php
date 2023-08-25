@@ -21,6 +21,6 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'user_item', 'user_id', 'item_id');
+        return $this->belongsToMany(Item::class, 'user_item', 'user_id', 'item_id')->withTimestamps();
     }
 }
