@@ -18,12 +18,14 @@
 
                 <div class="flex justify-center gap-3">
                     <a href="/items/{{ $item['id'] }}/edit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</a>
+                        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <x-fas-edit class="w-5"/>Editar</a>
                     <form action="{{ route('items.destroy', $item->id) }}" method="POST" id="delete-form">
                         @csrf
                         @method('DELETE')
                         <button type="submit" onclick="confirmDelete()"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Excluir</button>
+                            class= "flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Excluir<x-fas-trash class="w-4"/></button>
                     </form>
                 </div>
             </div>

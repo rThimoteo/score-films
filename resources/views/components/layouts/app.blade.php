@@ -23,16 +23,18 @@
         <div class="flex gap-5">
             <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/"
                 wire:navigate>Todos</a>
-            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/filmes"
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/catalog/movie"
                 wire:navigate>Filmes</a>
-            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/series"
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/catalog/serie"
                 wire:navigate>Séries</a>
-            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/jogos"
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/catalog/game"
                 wire:navigate>Jogos</a>
+            <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/catalog/anime"
+                wire:navigate>Animes</a>
         </div>
         <div class="flex items-center gap-3">
             <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300"
-                href="/create-item" wire:navigate>
+                href="/item/create" wire:navigate>
                 <x-fas-plus class="w-4" />
                 <span class="">Adicionar</span>
             </a>

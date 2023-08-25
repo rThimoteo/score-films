@@ -24,8 +24,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::middleware('auth')->group(function () {
 
   Route::get('/', Main::class)->name('home');
+  Route::get('/catalog/{type?}', Main::class);
 
-  Route::get('/create-item', CreateItem::class);
+  Route::get('/item/create', CreateItem::class);
 
   Route::get('/items/{id}', ShowItem::class);
 

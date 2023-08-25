@@ -4,21 +4,27 @@ namespace App\Livewire\Item;
 
 use App\Models\Item;
 use App\Models\Type;
+use Carbon\Carbon;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class CreateItem extends Component
 {
-    #[Rule('required')] 
+    #[Rule('required')]
     public $name = '';
 
-    #[Rule('required')] 
+    #[Rule('required')]
     public $type_id = '';
-    
+
     public $description = '';
     public $img_url = '';
     public $banner_url = '';
     public $year = 0;
+
+    public function mount()
+    {
+        $this->year = Carbon::now()->year;
+    }
 
     public function save()
     {
@@ -30,9 +36,11 @@ class CreateItem extends Component
     }
     public function render()
     {
-        return view('livewire.create-item', [
-            'options' => Type::all()
-        ]
-    );
+        return view(
+            'livewire.create-item',
+            [
+                'options' => Type::all()
+            ]
+        );
     }
 }

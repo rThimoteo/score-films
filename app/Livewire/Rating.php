@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Item;
 use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +25,7 @@ class Rating extends Component
             ->first();
 
         $this->item_id = $itemid;
-        logger($data->date);
+        
         if ($data) {
             if ($data->date) {
                 $this->date = $data->date;
@@ -73,6 +72,8 @@ class Rating extends Component
             'score' => 'required',
         ]);
 
-        auth()->user()->items()->sync([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+        auth()->user()->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+
+        return $this->redirect('/');
     }
 }

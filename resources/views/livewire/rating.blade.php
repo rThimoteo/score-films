@@ -25,7 +25,7 @@
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 placeholder="Diga o que achou..."></textarea>
 
-            <x-pikaday name="date" wire:model="date" format="DD/MM/YYYY"
+            <input name="date" wire:model="date" format="DD/MM/YYYY" placeholder="DD/MM/YYYY"
                 class="my-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" />
             <div class="flex justify-end">
                 <button type="submit"

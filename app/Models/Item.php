@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Item extends Model
 {
@@ -23,5 +24,14 @@ class Item extends Model
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'item_genres', 'item_id', 'genre_id');
+    }
+
+    public function scopeUserScore(Builder $query): Builder
+    {
+        return $query->leftJoin('user_item', 'items.id', '=', 'user_item.item_id')
+            ->leftJoin('statuses', 'user_item.status_id', '=', 'statuses.id')
+            ->select('items.*', 'user_item.score', 'statuses.handler as status_handler', 'statuses.name as status_name')
+            ->where('user_item.user_id', auth()->id())
+            ->orWhereNull('user_item.user_id');
     }
 }

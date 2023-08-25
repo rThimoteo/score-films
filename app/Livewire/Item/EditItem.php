@@ -42,6 +42,8 @@ class EditItem extends Component
             'banner_url' => $this->banner_url,
             'img_url' => $this->img_url
         ]);
+
+        return $this->redirect('/');
     }
 
     public function render()
