@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Item;
 
+use App\Models\Genre;
 use Livewire\Component;
 use App\Models\Item;
 use App\Models\Type;
@@ -15,16 +16,22 @@ class EditItem extends Component
     public $type;
     public $banner_url;
     public $img_url;
+    public $genres = [];
+    public $prevGenres = [];
+    public $allGenres = [];
+    public $selectedGenres = [];
 
     public function mount($id)
     {
-        $this->item = Item::find($id);
+        $this->item = Item::find($id)->with('genres')->first();
+
         $this->name = $this->item->name;
         $this->description = $this->item->description;
         $this->year = $this->item->year;
         $this->type = $this->item->type;
         $this->banner_url = $this->item->banner_url;
         $this->img_url = $this->item->img_url;
+
     }
 
     public function update()

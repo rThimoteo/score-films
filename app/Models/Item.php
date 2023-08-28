@@ -23,7 +23,7 @@ class Item extends Model
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class, 'item_genres', 'item_id', 'genre_id');
+        return $this->belongsToMany(Genre::class, 'item_genre', 'item_id', 'genre_id')->withTimestamps();
     }
 
     public function scopeUserScore(Builder $query): Builder
