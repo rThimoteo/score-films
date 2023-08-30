@@ -26,6 +26,20 @@
                                         <label for="genre-{{ $genre->id }}" class="">{{ $genre->name }}</label>
                                     </div>
                                 @endforeach
+                                <div x-data="{ open: true }">
+                                    <div x-show="open" @click="open = false"
+                                        class="flex items-center cursor-pointer rounded-full bg-slate-500 px-2 gap-1 hover:bg-slate-600">
+                                        <x-fas-plus class="w-3" />
+                                        Novo
+                                    </div>
+                                    <div x-show="!open" class="flex items-center rounded-full">
+                                        <input class="rounded-full bg-slate-500 px-2 w-32 h-7" type="text" wire:model="new_genre" id="new_genre"  />
+                                        <button type="button" @click="open = true" wire:click="createGenre()"
+                                            class=" rounded-full -ml-7 bg-cyan-800 p-2 hover:bg-cyan-950">
+                                            <x-fas-check class="w-3" />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="flex justify-end mt-3 gap-3">
@@ -45,6 +59,4 @@
             @endteleport
         </div>
     </div>
-
-
 </div>

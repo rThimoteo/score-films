@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Item;
 
+use App\Models\Genre;
 use App\Models\Item;
 use App\Models\Type;
 use Carbon\Carbon;
@@ -21,16 +22,26 @@ class CreateItem extends Component
     public $banner_url = '';
     public $year = 0;
 
+    public $genres = [];
+    public $allGenres = [];
+    public $selectedGenres = [];
+    public $new_genre = '';
+
     public function mount()
     {
         $this->year = Carbon::now()->year;
+        $this->allGenres = Genre::all();
+
+        $this->type_id = Type::where('handler', Type::FILME)->first()->id;
     }
 
     public function save()
     {
-        Item::create(
+        $newItem = Item::create(
             $this->only(['name', 'type_id', 'description', 'img_url', 'banner_url', 'year'])
         );
+
+        $newItem->genres()->sync($this->genres);
 
         return $this->redirect('/');
     }
@@ -42,5 +53,30 @@ class CreateItem extends Component
                 'options' => Type::all()
             ]
         );
+    }
+
+    public function cancelSelect()
+    {
+        $this->genres = $this->prevGenres;
+    }
+
+    public function confirmGenres()
+    {
+        $filteredGenres = $this->allGenres->filter(function ($genre) {
+            return in_array($genre['id'], $this->genres);
+        })->toArray();
+
+        $this->selectedGenres = $filteredGenres;
+    }
+
+    public function createGenre()
+    {
+        $addGenre = Genre::firstOrCreate(['name' => $this->new_genre, 'handler' => strtolower($this->new_genre)]);
+
+        if ($addGenre->wasRecentlyCreated) {
+            $this->allGenres[] = $addGenre;
+        }
+
+        $this->new_genre = '';
     }
 }

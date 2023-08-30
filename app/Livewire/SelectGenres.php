@@ -7,12 +7,12 @@ use Livewire\Component;
 
 class SelectGenres extends Component
 {
-
     public $genres = [];
     public $prevGenres = [];
     public $allGenres = [];
     public $selectedGenres = [];
     public $item = null;
+    public $new_genre = '';
 
     public function mount($item)
     {
@@ -43,9 +43,20 @@ class SelectGenres extends Component
         $filteredGenres = $this->allGenres->filter(function ($genre) {
             return in_array($genre['id'], $this->genres);
         })->toArray();
-        
+
         $this->selectedGenres = $filteredGenres;
 
         $this->item->genres()->sync($this->genres);
+    }
+
+    public function createGenre()
+    {
+        $addGenre = Genre::firstOrCreate(['name' => $this->new_genre, 'handler' => strtolower($this->new_genre)]);
+
+        if ($addGenre->wasRecentlyCreated) {
+            $this->allGenres[] = $addGenre;
+        }
+
+        $this->new_genre = '';
     }
 }

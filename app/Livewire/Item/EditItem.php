@@ -23,8 +23,8 @@ class EditItem extends Component
 
     public function mount($id)
     {
-        $this->item = Item::find($id)->with('genres')->first();
-
+        $this->item = Item::where('id', $id)->with('genres')->first();
+        
         $this->name = $this->item->name;
         $this->description = $this->item->description;
         $this->year = $this->item->year;
