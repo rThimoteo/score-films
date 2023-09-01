@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Status;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -16,6 +17,9 @@ class Rating extends Component
     public $date = '';
     public $status_id = 1;
 
+    //Variável para definir se o score será compartilhado entre os usuários
+    public $score_compartilhado = true;
+
     public function mount($itemid = 0)
     {
         $data = DB::table('user_item')
@@ -25,7 +29,7 @@ class Rating extends Component
             ->first();
 
         $this->item_id = $itemid;
-        
+
         if ($data) {
             if ($data->date) {
                 $this->date = $data->date;
@@ -68,12 +72,17 @@ class Rating extends Component
 
     public function save()
     {
-        $this->validate([
-            'score' => 'required',
-        ]);
+        if ($this->status_id  == Status::where('handler', Status::LISTA)->first()->id) {
+            $this->score = null;
+        }
 
-        auth()->user()->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
-
+        if ($this->score_compartilhado) {
+            User::all()->map(function ($user) {
+                $user->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+            });
+        } else {
+            auth()->user()->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+        }
         return $this->redirect('/');
     }
 }

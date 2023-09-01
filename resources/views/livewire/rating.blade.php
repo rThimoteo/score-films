@@ -9,7 +9,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="rating flex flex-row">
+        <div class="rating flex flex-row mt-2">
             @for ($i = 1; $i <= 10; $i++)
                 <x-fas-star
                     class="w-8 {{ $temp_score >= $i ? 'star-temp' : ($score >= $i ? 'star-filled' : 'star-empty') }} star h-auto my-auto"

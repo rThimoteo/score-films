@@ -13,8 +13,8 @@
               ">
                 <div class="flex justify-between pt-1 px-2 items-center">
                     <div>
-                        @if (isset($item['status_handler']))
-                            @switch($item['status_handler'])
+                        @if (isset($item->status))
+                            @switch($item->status)
                                 @case('consuming')
                                     <x-fas-eye class="w-6 text-purple-400 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" />
                                 @break
@@ -42,9 +42,9 @@
                     </div>
 
                     <div class="flex justify-end">
-                        @if (isset($item['score']) && $item['score'] > 0)
+                        @if (isset($item->users->first()->pivot->score) && $item->users->first()->pivot->score > 0)
                             <span
-                                class="drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-white text-xl font-bold">{{ $item['score'] }}</span>
+                                class="drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-white text-xl font-bold">{{ $item->users->first()->pivot->score }}</span>
                             <x-fas-star class="w-6 text-yellow-500 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" />
                         @endif
                     </div>

@@ -16,7 +16,7 @@
                 </p>
                 <p class="text-gray-600 mb-3">{{ $item->description }}</p>
 
-                <div class="flex justify-center gap-3">
+                <div class="flex justify-start gap-3">
                     <a href="/items/{{ $item['id'] }}/edit"
                         class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         <x-fas-edit class="w-5"/>Editar</a>

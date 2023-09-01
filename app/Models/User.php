@@ -21,6 +21,9 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'user_item', 'user_id', 'item_id')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'user_item')
+            ->using(UserItem::class)
+            ->withPivot('score', 'status_id', 'comment', 'is_favorite', 'date')
+            ->withTimestamps();
     }
 }

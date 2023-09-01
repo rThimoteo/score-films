@@ -19,11 +19,11 @@ class StatusSeeder extends Seeder
                 'handler' => Status::CONSUMINDO
             ],
             [
-                'name' => 'Prioridade',
+                'name' => 'Pra Ontem',
                 'handler' => Status::PRIORIDADE
             ],
             [
-                'name' => 'Lista',
+                'name' => 'Tá na Lista',
                 'handler' => Status::LISTA
             ],
             [

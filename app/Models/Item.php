@@ -26,12 +26,11 @@ class Item extends Model
         return $this->belongsToMany(Genre::class, 'item_genre', 'item_id', 'genre_id')->withTimestamps();
     }
 
-    public function scopeUserScore(Builder $query): Builder
+    public function users()
     {
-        return $query->leftJoin('user_item', 'items.id', '=', 'user_item.item_id')
-            ->leftJoin('statuses', 'user_item.status_id', '=', 'statuses.id')
-            ->select('items.*', 'user_item.score', 'statuses.handler as status_handler', 'statuses.name as status_name')
-            ->where('user_item.user_id', auth()->id())
-            ->orWhereNull('user_item.user_id');
+        return $this->belongsToMany(User::class, 'user_item')
+            ->using(UserItem::class)
+            ->withPivot('score', 'status_id', 'comment', 'is_favorite', 'date')
+            ->withTimestamps();
     }
 }
