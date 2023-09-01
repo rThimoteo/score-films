@@ -32,7 +32,7 @@ class Rating extends Component
 
         if ($data) {
             if ($data->date) {
-                $this->date = $data->date;
+                $this->date = Carbon::create($data->date)->format('d/m/Y');
             }
             if ($data->status_id) {
                 $this->status_id = $data->status_id;
@@ -78,10 +78,24 @@ class Rating extends Component
 
         if ($this->score_compartilhado) {
             User::all()->map(function ($user) {
-                $user->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+                $user->items()->syncWithoutDetaching([
+                    $this->item_id => [
+                        'score' => $this->score,
+                        'comment' => $this->comment,
+                        'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
+                        'status_id' => $this->status_id
+                    ]
+                ]);
             });
         } else {
-            auth()->user()->items()->syncWithoutDetaching([$this->item_id => ['score' => $this->score, 'comment' => $this->comment, 'date' => $this->date, 'status_id' => $this->status_id]]);
+            auth()->user()->items()->syncWithoutDetaching([
+                $this->item_id => [
+                    'score' => $this->score,
+                    'comment' => $this->comment,
+                    'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
+                    'status_id' => $this->status_id
+                ]
+            ]);
         }
         return $this->redirect('/');
     }

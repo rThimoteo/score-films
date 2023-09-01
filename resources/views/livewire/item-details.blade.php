@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center m-auto">
-    <div class="lg:w-10/12 w-full bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="lg:w-10/12 w-full bg-zinc-800 shadow-md rounded-lg overflow-hidden">
         <div class="relative">
             <div class="h-64 bg-cover bg-center" style="background-image: url('{{ $item->banner_url }}')"></div>
             <div class="absolute left-0 bottom-0 right-0 top-0 flex items-center justify-center">
@@ -9,23 +9,29 @@
         </div>
         <div class="flex flex-row">
             <div class="flex flex-col basis-1/2 p-8">
-                <h2 class="text-3xl font-bold mb-2">{{ $item->name }}</h2>
-                <p class="text-gray-600 mb-3">{{ $item->type->name }} @if ($item->year)
+                <h2 class="text-3xl text-white font-bold mb-3">{{ $item->name }}</h2>
+                <p class="text-gray-300">{{ $item->type->name }} @if ($item->year)
                         - ({{ $item->year }})
                     @endif
                 </p>
-                <p class="text-gray-600 mb-3">{{ $item->description }}</p>
+                <div class="flex flex-row gap-2 text-sm mb-4">
+                    @foreach ($item->genres as $genre)
+                        <span class="text-gray-300">{{ $genre->name }}</span>
+                    @endforeach
+                </div>
+                <span class="text-gray-300 mb-0">Sinopse</span>
+                <p class="text-gray-300 text-sm mb-3">{{ $item->description }}</p>
 
                 <div class="flex justify-start gap-3">
                     <a href="/items/{{ $item['id'] }}/edit"
                         class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        <x-fas-edit class="w-5"/>Editar</a>
+                        <x-fas-edit class="w-5" />Editar</a>
                     <form action="{{ route('items.destroy', $item->id) }}" method="POST" id="delete-form">
                         @csrf
                         @method('DELETE')
                         <button type="submit" onclick="confirmDelete()"
-                            class= "flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            Excluir<x-fas-trash class="w-4"/></button>
+                            class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Excluir<x-fas-trash class="w-4" /></button>
                     </form>
                 </div>
             </div>
