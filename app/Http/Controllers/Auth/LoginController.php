@@ -27,7 +27,7 @@ class LoginController extends Controller
 
         // Login falhou, redirecionar de volta para a página de login com uma mensagem de erro
         return redirect()->back()->withErrors([
-            'username' => 'As credenciais fornecidas são inválidas.',
+            'username' => 'ah, Lee... o que foi que eu fiz?',
         ]);
     }
 

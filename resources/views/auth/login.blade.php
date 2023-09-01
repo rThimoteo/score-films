@@ -24,16 +24,16 @@
             @csrf
 
             <div class="flex flex-col text-left mb-5">
-                <label for="username">Username</label>
+                <label for="username">Usuário</label>
                 <input type="username" class="bg-zinc-800 rounded-md text-white border-1 border-zinc-300 p-2" name="username" id="username" required>
             </div>
 
             <div class="flex flex-col text-left mb-8">
-                <label for="password">Password</label>
+                <label for="password">Senha</label>
                 <input type="password" class="bg-zinc-800 rounded-md text-white border-1 border-zinc-300 p-2" name="password" id="password" required>
             </div>
 
-            <button class="rounded-2xl px-4 py-3 bg-violet-500 font-bold hover:bg-violet-700" type="submit">Login</button>
+            <button class="rounded-2xl px-4 py-3 bg-violet-500 font-bold hover:bg-violet-700" type="submit">Penetrar</button>
         </form>
     </div>
 </body>
