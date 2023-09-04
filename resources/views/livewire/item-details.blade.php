@@ -1,10 +1,16 @@
 <div class="flex flex-col items-center justify-center m-auto">
     <div class="lg:w-10/12 w-full bg-zinc-800 shadow-md rounded-lg overflow-hidden">
         <div class="relative">
-            <div class="h-64 bg-cover bg-center" style="background-image: url('{{ $item->banner_url }}')"></div>
+            <div class="h-64 bg-cover bg-center"
+                style="@if (empty($item->banner_url)) background-color: #a1a1a1; @else background-image: url('{{ $item->banner_url }}') @endif">
+            </div>
+
             <div class="absolute left-0 bottom-0 right-0 top-0 flex items-center justify-center">
-                <img src="{{ $item->img_url }}" alt="Sem Imagem"
-                    class="w-32 object-cover border-2 rounded-md border-white">
+                @if (!empty($item->img_url))
+                    <img src="{{ $item->img_url }}" class="w-32 h-44 object-cover border-2 rounded-md border-white">
+                @else
+                    <span class="text-2xl font-bold text-white">{{ $item->name }}</span>
+                @endif
             </div>
         </div>
         <div class="flex flex-row">

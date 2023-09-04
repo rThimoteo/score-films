@@ -1,4 +1,8 @@
-<div class="p-10">
+<div class="p-10 pb-2">
+    <div class="absolute top-2 left-1/2 transform -translate-x-1/2">
+        <input class="rounded-lg bg-opacity-50 border-zinc-600 border-2 text-zinc-300 bg-zinc-700 py-0.5 px-2"
+            type="text" wire:model.live.debounce.500ms="filtro" placeholder="Buscar...">
+    </div>
     <div class="flex flex-row gap-7 flex-wrap">
         @foreach ($items as $item)
             <a href="/items/{{ $item['id'] }}"
@@ -55,5 +59,9 @@
                 </div>
             </a>
         @endforeach
+        <div wire:loading class="my-auto">
+            <x-fas-circle-notch class="mx-auto animate-spin w-10 text-sky-800" />
+            <span class="mx-auto text-white">Carregando...</span>
+        </div>
     </div>
 </div>

@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css')
+    @livewireStyles()
 
     <title>New Tomatoes</title>
 
@@ -32,6 +33,7 @@
             <a class="transition ease-in-out hover:scale-110 hover:text-white duration-300" href="/catalog/anime"
                 wire:navigate>Animes</a>
         </div>
+        
         <div class="flex items-center gap-3">
             <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300"
                 href="/item/create" wire:navigate>
@@ -39,14 +41,26 @@
                 <span class="">Adicionar</span>
             </a>
             @auth
-                <form action="{{ route('logout') }}" method="POST">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="nav-link btn btn-link">Logout</button>
                 </form>
             @endauth
         </div>
     </nav>
-    {{ $slot }}
+    <div>
+        {{ $slot }}
+    </div>
+    @livewireScripts()
 </body>
+
+<script>
+    document.getElementById('logout-form').addEventListener('submit', function(event) {
+        var confirmation = confirm('Tem certeza que deseja fazer logout?');
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    });
+</script>
 
 </html>

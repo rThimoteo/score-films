@@ -5,19 +5,19 @@ namespace App\Livewire;
 use App\Models\Item;
 use App\Models\Status;
 use App\Models\Type;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Main extends Component
 {
-  public $items = [];
+  public $catalog;
+  public $filtro;
 
   public function mount($type = null)
   {
-    $this->listItems($type);
+    $this->catalog = $type;
   }
 
-  public function listItems($type)
+  public function listItems()
   {
     $user = auth()->user();
 
@@ -26,9 +26,13 @@ class Main extends Component
         ->select('score', 'status_id', 'comment', 'is_favorite', 'date');
     }]);
 
-    if ($type !== null) {
-      $type_id = Type::where('handler', $type)->first()->id;
+    if ($this->catalog !== null) {
+      $type_id = Type::where('handler', $this->catalog)->first()->id;
       $query->where('type_id', $type_id);
+    }
+
+    if ($this->filtro !== null) {
+      $query->where('name', 'like', '%' . $this->filtro . '%');
     }
 
     $tempItems = $query->get();
@@ -40,13 +44,15 @@ class Main extends Component
       }
     }
 
-    $this->items = $tempItems;
+    return $tempItems;
   }
 
   public function render()
   {
+    $items = $this->listItems();
+    
     return view('livewire.main', [
-      'items' => $this->items,
+      'items' => $items,
     ]);
   }
 }
