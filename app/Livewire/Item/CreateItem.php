@@ -45,19 +45,10 @@ class CreateItem extends Component
 
         return $this->redirect('/');
     }
-    public function render()
-    {
-        return view(
-            'livewire.create-item',
-            [
-                'options' => Type::all()
-            ]
-        );
-    }
 
     public function cancelSelect()
     {
-        $this->genres = $this->prevGenres;
+        $this->genres = [];
     }
 
     public function confirmGenres()
@@ -78,5 +69,14 @@ class CreateItem extends Component
         }
 
         $this->new_genre = '';
+    }
+    public function render()
+    {
+        return view(
+            'livewire.create-item',
+            [
+                'options' => Type::all()
+            ]
+        );
     }
 }
