@@ -15,6 +15,10 @@
         </div>
         <div class="flex flex-row">
             <div class="flex flex-col basis-1/2 p-8">
+                <button
+                    class="flex flex-row @if (!isset($item->parent)) hidden @endif self-start text-sm items-center gap-2 justify-center w-auto rounded-full px-3 py-1 bg-white font-bold hover:bg-gray-300"
+                    type="button" wire:click="parentItem"><x-fas-arrow-left
+                        class="w-3" />{{ $prevString }}</button>
                 <h2 class="text-3xl text-white font-bold mb-3">{{ $item->name }}</h2>
                 <p class="text-gray-300">{{ $item->type->name }} @if ($item->year)
                         - ({{ $item->year }})
@@ -42,6 +46,10 @@
                 </div>
             </div>
             <div class="flex flex-col basis-1/2 p-8">
+                <button
+                    class="flex flex-row @if (!isset($item->child)) hidden @endif self-end text-sm items-center gap-2 justify-center w-auto rounded-full px-3 py-1 bg-white font-bold hover:bg-gray-300"
+                    type="button" wire:click="childItem">{{ $nextString }}<x-fas-arrow-right
+                        class="w-3" /></button>
                 <livewire:rating :itemid="$item->id" />
             </div>
         </div>

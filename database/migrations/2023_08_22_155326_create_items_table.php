@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->integer('episodes')->nullable();
             $table->string('img_url')->nullable();
             $table->string('banner_url')->nullable();
             $table->integer('year')->nullable();
-            $table->foreignId('type_id')->constrained();
+            $table->foreignId('type_id')->constrained('types');
+            $table->foreignId('universe_id')->nullable()->constrained('universes');
+            $table->foreignId('parent_id')->nullable()->constrained('items');
             $table->timestamps();
+
+            $table->unique('parent_id');
         });
     }
 

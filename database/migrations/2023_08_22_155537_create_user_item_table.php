@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('user_item', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('item_id')->constrained();
-            $table->foreignId('status_id')->constrained();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('item_id')->constrained('items');
+            $table->foreignId('status_id')->constrained('statuses');
             $table->integer('score')->nullable();
+            $table->integer('actual_episode')->nullable();
             $table->string('comment')->nullable();
             $table->string('date')->nullable();
             $table->boolean('is_favorite')->default(false);

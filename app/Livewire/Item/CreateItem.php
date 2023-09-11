@@ -27,6 +27,10 @@ class CreateItem extends Component
     public $selectedGenres = [];
     public $new_genre = '';
 
+    public $hasParent = false;
+    public $search = '';
+    public $parentId = null;
+
     public function mount()
     {
         $this->year = Carbon::now()->year;
@@ -37,9 +41,21 @@ class CreateItem extends Component
 
     public function save()
     {
-        $newItem = Item::create(
-            $this->only(['name', 'type_id', 'description', 'img_url', 'banner_url', 'year'])
-        );
+        $saveItem = [
+            'name' => $this->name,
+            'description' => $this->description,
+            'year' => $this->year,
+            'type_id' => $this->type_id,
+            'banner_url' => $this->banner_url,
+            'img_url' => $this->img_url
+        ];
+
+
+        if ($this->hasParent && isset($this->parentId)) {
+            $saveItem['parent_id'] = $this->parentId;
+        }
+
+        $newItem = Item::create($saveItem);
 
         $newItem->genres()->sync($this->genres);
 
@@ -70,12 +86,35 @@ class CreateItem extends Component
 
         $this->new_genre = '';
     }
+
+    public function updatedSearch()
+    {
+        return Item::where('name', 'like', '%' . $this->search . '%')
+            ->whereRaw('id NOT IN (SELECT parent_id FROM items WHERE parent_id IS NOT NULL)')
+            ->take(5)
+            ->get()
+            ->toArray();
+    }
+
+    public function selectParent($parent)
+    {
+        $this->parentId = $parent['id'];
+        $this->search = $parent['name'];
+    }
+
+    public function toggleHasParent()
+    {
+        $this->hasParent;
+    }
     public function render()
     {
+        $items = $this->updatedSearch();
+
         return view(
             'livewire.create-item',
             [
-                'options' => Type::all()
+                'options' => Type::all(),
+                'items' => $items
             ]
         );
     }

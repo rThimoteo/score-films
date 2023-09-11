@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             StatusSeeder::class,
             GenreSeeder::class,
-            ItemSeeder::class
+            ItemSeeder::class,
+            StarWarsSeeder::class,
         ]);
     }
 }

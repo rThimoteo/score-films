@@ -1,7 +1,7 @@
 <div>
     <span class="block mb-1 text-sm font-medium text-white">Gêneros: </span>
     <div class="flex flex-row gap-2 items-center">
-        <div class="bg-gray-700 flex rounded-lg px-2 text-sm items-center h-10 w-96 truncate">
+        <div class="bg-gray-700 flex rounded-lg px-2 text-sm items-center h-10 w-full truncate">
             @foreach ($selectedGenres as $key => $genre)
                 <span class="mx-1" wire:key="{{ $genre['id'] }}">{{ $genre['name'] }}</span>
             @endforeach

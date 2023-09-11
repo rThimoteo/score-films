@@ -13,7 +13,10 @@ class Item extends Model
         'img_url',
         'banner_url',
         'type_id',
-        'year'
+        'year',
+        'parent_id',
+        'episodes',
+        'universe_id'
     ];
 
     public function type()
@@ -32,5 +35,15 @@ class Item extends Model
             ->using(UserItem::class)
             ->withPivot('score', 'status_id', 'comment', 'is_favorite', 'date')
             ->withTimestamps();
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Item::class, 'parent_id');
+    }
+
+    public function child()
+    {
+        return $this->hasOne(Item::class, 'parent_id');
     }
 }

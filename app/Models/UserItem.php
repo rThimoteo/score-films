@@ -14,6 +14,7 @@ class UserItem extends Pivot
         'comment',
         'is_favorite',
         'date',
+        'actual_episode'
     ];
 
     protected $casts = [
