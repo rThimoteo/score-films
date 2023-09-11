@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Livewire\Item\EditItem;
+use App\Livewire\Item\CreateItem;
+use App\Livewire\Item\ShowItem;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Counter;
+use App\Livewire\Main;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +18,21 @@ use App\Livewire\Counter;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-Route::get('/counter', Counter::class);
+Route::middleware('auth')->group(function () {
+
+  Route::get('/', Main::class)->name('home');
+  Route::get('/catalog/{type?}', Main::class);
+
+  Route::get('/item/create', CreateItem::class);
+
+  Route::get('/items/{id}', ShowItem::class);
+
+  Route::get('/items/{id}/edit', EditItem::class);
+
+  Route::resource('items', 'App\Http\Controllers\ItemController');
+
+  Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');
+});

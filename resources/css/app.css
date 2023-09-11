@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.star {
+    cursor: pointer;
+}
+
+.star-empty {
+    color: #fdeca3; /* Amarelo claro */
+}
+
+.star-temp {
+    color: #ffd700; /* Amarelo claro */
+}
+
+.star-filled {
+  color: #FF00FF;
+}
