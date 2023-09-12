@@ -51,6 +51,6 @@ class ShowItem extends Component
 
     public function render()
     {
-        return view('livewire.item-details');
+        return view('livewire.show-item');
     }
 }
