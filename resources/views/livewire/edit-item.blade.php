@@ -1,5 +1,5 @@
 <div class="text-white flex justify-center self-center">
-    <form wire:submit="update" class="w-full flex flex-col justify-end">
+    <form wire:submit="updateItem" class="w-full flex flex-col justify-end">
         <div class="flex flex-row w-full gap-4">
             <div class="flex flex-col basis-1/2 px-8 py-6 gap-8">
                 <div>
@@ -10,7 +10,7 @@
                 </div>
                 <div>
                     <label for="type_id" class="block mb-1 text-sm font-medium text-white">Tipo de Conteúdo</label>
-                    <select id="type_id" required wire:model="type_id"
+                    <select id="type_id" required wire:model.live="type"
                         class="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                         @foreach ($options as $option)
                             <option @if ($item->type_id == $option['id']) selected @endif value="{{ $option['id'] }}">
@@ -18,6 +18,14 @@
                             </option>
                         @endforeach
                     </select>
+                    @if ($selectedType && $hasEpisodes)
+                        <div class="mt-2">
+                            <label for="episodes" class="block mb-1 text-sm font-medium text-white">Episódios</label>
+                            <input type="number" wire:model.live="episodes" id="episodes"
+                                class="text-sm rounded-lg block w-20 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="∞">
+                        </div>
+                    @endif
                 </div>
                 <div>
                     <label for="description" class="block mb-1 text-sm font-medium text-white">Sinopse</label>
@@ -31,14 +39,15 @@
                     <label for="has_parent" class="text-white">É uma sequência?</label>
                 </div>
                 @if ($hasParent)
-                    <div id='search' class="flex flex-row items-center gap-2" x-data="{ open: false }"
-                        x-on:click.away="open = false">
-                        <label for="search">De:</label>
-                        <input type="text"
-                            class="w-full relative p-2.5 text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                            wire:model.live.debounce.500ms="search" @focus="open = true" placeholder="Pesquisar...">
-                        <div x-show="open" class="relative">
-                            <ul class="absolute mt-1 border border-gray-300 rounded-md bg-white shadow-sm">
+                    <div id='search' class="" x-data="{ open: false }" x-on:click.away="open = false">
+                        <div class="flex flex-row items-center gap-2">
+                            <label for="search">De:</label>
+                            <input type="text"
+                                class="w-full relative p-2.5 text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                                wire:model.live.debounce.500ms="search" @focus="open = true" placeholder="Pesquisar...">
+                        </div>
+                        <div x-show="open" class="ml-[2rem]">
+                            <ul class="flex flex-col mt-1 border border-gray-300 rounded-md bg-white shadow-sm">
                                 @foreach ($items as $parent)
                                     <li class="text-zinc-700 cursor-pointer px-4 py-2 hover:bg-gray-100"
                                         wire:click="selectParent({{ json_encode($parent) }})" x-on:click="open = false">

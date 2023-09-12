@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Item;
 
-use App\Models\Genre;
 use App\Models\Item;
 use App\Models\Type;
 use Carbon\Carbon;

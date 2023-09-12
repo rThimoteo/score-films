@@ -16,6 +16,8 @@ class Rating extends Component
     public $comment = '';
     public $date = '';
     public $status_id = 1;
+    public $selectedStatus;
+    public $hasFinishDate = false;
 
     //Variável para definir se o score será compartilhado entre os usuários
     public $score_compartilhado = true;
@@ -36,6 +38,12 @@ class Rating extends Component
             }
             if ($data->status_id) {
                 $this->status_id = $data->status_id;
+                $this->selectedStatus = Status::find($data->status_id);
+
+                $handler = $this->selectedStatus->handler;
+                if ($handler == 'done' || $handler == 'dropped') {
+                    $this->hasFinishDate = true;
+                }
             }
             if ($data->score) {
                 $this->score = $data->score;
@@ -63,12 +71,6 @@ class Rating extends Component
         $this->temp_score = 0;
     }
 
-    public function render()
-    {
-        return view('livewire.rating', [
-            'options' => Status::all()
-        ]);
-    }
 
     public function save()
     {
@@ -76,27 +78,52 @@ class Rating extends Component
             $this->score = null;
         }
 
+        $itemRating = [
+            'score' => $this->score,
+            'comment' => $this->comment,
+            'status_id' => $this->status_id
+        ];
+
+        if ($this->hasFinishDate) {
+            $itemRating['date'] = Carbon::createFromFormat('d/m/Y', $this->date)->toDateString();
+        } else {
+            $itemRating['date'] = null;
+        }
+
         if ($this->score_compartilhado) {
-            User::all()->map(function ($user) {
+            User::all()->map(function ($user) use ($itemRating) {
                 $user->items()->syncWithoutDetaching([
-                    $this->item_id => [
-                        'score' => $this->score,
-                        'comment' => $this->comment,
-                        'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
-                        'status_id' => $this->status_id
-                    ]
+                    $this->item_id => $itemRating
                 ]);
             });
         } else {
             auth()->user()->items()->syncWithoutDetaching([
-                $this->item_id => [
-                    'score' => $this->score,
-                    'comment' => $this->comment,
-                    'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
-                    'status_id' => $this->status_id
-                ]
+                $this->item_id => $itemRating
             ]);
         }
         return $this->redirect('/');
+    }
+
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'status_id') {
+            $this->selectedStatus = Status::find($this->status_id);
+
+            $handler = $this->selectedStatus->handler;
+            if ($handler == 'done' || $handler == 'dropped') {
+                $this->hasFinishDate = true;
+            } else {
+                $this->hasFinishDate = false;
+            }
+
+            $this->date = Carbon::now()->format('d/m/Y');
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.rating', [
+            'options' => Status::all()
+        ]);
     }
 }
