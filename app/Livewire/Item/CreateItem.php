@@ -6,6 +6,7 @@ use App\Models\Genre;
 use App\Models\Item;
 use App\Models\Type;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -24,9 +25,6 @@ class CreateItem extends Component
     public $episodes = 0;
 
     public $genres = [];
-    public $allGenres = [];
-    public $selectedGenres = [];
-    public $new_genre = '';
 
     public $hasParent = false;
     public $search = '';
@@ -38,9 +36,14 @@ class CreateItem extends Component
     public function mount()
     {
         $this->year = Carbon::now()->year;
-        $this->allGenres = Genre::all();
 
         $this->type_id = Type::where('handler', Type::FILME)->first()->id;
+    }
+
+    #[On('genres-selected')] 
+    public function updateGenres($selectedGenres)
+    {
+        $this->genres = $selectedGenres;
     }
 
     public function save()
@@ -68,31 +71,6 @@ class CreateItem extends Component
         $newItem->genres()->sync($this->genres);
 
         return $this->redirect('/');
-    }
-
-    public function cancelSelect()
-    {
-        $this->genres = [];
-    }
-
-    public function confirmGenres()
-    {
-        $filteredGenres = $this->allGenres->filter(function ($genre) {
-            return in_array($genre['id'], $this->genres);
-        })->toArray();
-
-        $this->selectedGenres = $filteredGenres;
-    }
-
-    public function createGenre()
-    {
-        $addGenre = Genre::firstOrCreate(['name' => $this->new_genre, 'handler' => strtolower($this->new_genre)]);
-
-        if ($addGenre->wasRecentlyCreated) {
-            $this->allGenres[] = $addGenre;
-        }
-
-        $this->new_genre = '';
     }
 
     public function updatedSearch()

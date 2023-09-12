@@ -8,7 +8,7 @@
                 @endforeach
         </div>
         <div class="" x-data="{ open: false }">
-            <button @click="open = true"
+            <button x-on:click="open = true"
                 class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-2 px-3 rounded-lg"
                 type="button">Editar...</button>
 
@@ -30,7 +30,7 @@
                                     </div>
                                 @endforeach
                                 <div x-data="{ open: true }">
-                                    <div x-show="open" @click="open = false"
+                                    <div x-show="open" x-on:click="open = false"
                                         class="flex items-center cursor-pointer rounded-full bg-slate-500 px-2 gap-1 hover:bg-slate-600">
                                         <x-fas-plus class="w-3" />
                                         Novo
@@ -38,7 +38,7 @@
                                     <div x-show="!open" class="flex items-center rounded-full">
                                         <input class="rounded-full bg-slate-500 px-2 w-32 h-7"
                                             type="text" wire:model="new_genre" id="new_genre" />
-                                        <button type="button" @click="open = true"
+                                        <button type="button" x-on:click="open = true"
                                             wire:click="createGenre()"
                                             class=" rounded-full -ml-7 bg-cyan-800 p-2 hover:bg-cyan-950">
                                             <x-fas-check class="w-3" />
@@ -48,15 +48,15 @@
                             </div>
                         </div>
                         <div class="flex justify-end mt-3 gap-3">
-                            <button @click="open = false" wire:click="cancelSelect()"
+                            <button x-on:click="open = false" wire:click="cancelSelect()"
                                 class="rounded-2xl px-4 py-1 bg-red-600 font-bold hover:bg-red-500"
                                 type="button">Cancelar</button>
-                            <button @click="open = false"
+                            <button x-on:click="open = false"
                                 class="rounded-2xl px-4 py-1 bg-blue-700 font-bold hover:bg-blue-600"
                                 type="button" wire:click="confirmGenres()">Confirmar</button>
                         </div>
                         <div class="absolute right-2 top-2 p-1 hover:text-zinc-300 cursor-pointer"
-                            @click="open = false" wire:click="cancelSelect()">
+                            x-on:click="open = false" wire:click="cancelSelect()">
                             <x-fas-x class="w-3" />
                         </div>
                     </div>

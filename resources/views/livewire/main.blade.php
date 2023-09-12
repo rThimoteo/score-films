@@ -4,7 +4,7 @@
             type="text" wire:model.live.debounce.500ms="name_filter" placeholder="Buscar...">
     </div>
     <div class="flex justify-end px-10 pt-4 pb-2" x-data="{ open: false }">
-        <button @click="open = true" class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-lg"
+        <button x-on:click="open = true" class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-lg"
             type="button">Filtros</button>
 
         @teleport('body')
@@ -26,13 +26,13 @@
                         </div>
                     </div>
                     <div class="flex justify-end mt-3 gap-3">
-                        <button @click="open = false" wire:click="cancelSelect()"
+                        <button x-on:click="open = false" wire:click="cancelSelect()"
                             class="rounded-2xl px-4 py-1 bg-red-600 font-bold hover:bg-red-500"
                             type="button">Cancelar</button>
-                        <button @click="open = false" class="rounded-2xl px-4 py-1 bg-blue-700 font-bold hover:bg-blue-600"
+                        <button x-on:click="open = false" class="rounded-2xl px-4 py-1 bg-blue-700 font-bold hover:bg-blue-600"
                             type="button" wire:click="confirmGenres()">Confirmar</button>
                     </div>
-                    <div class="absolute right-2 top-2 p-1 hover:text-zinc-300 cursor-pointer" @click="open = false"
+                    <div class="absolute right-2 top-2 p-1 hover:text-zinc-300 cursor-pointer" x-on:click="open = false"
                         wire:click="cancelSelect()">
                         <x-fas-x class="w-3" />
                     </div>

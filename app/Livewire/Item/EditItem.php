@@ -5,6 +5,7 @@ namespace App\Livewire\Item;
 use Livewire\Component;
 use App\Models\Item;
 use App\Models\Type;
+use Livewire\Attributes\On;
 
 class EditItem extends Component
 {
@@ -16,9 +17,6 @@ class EditItem extends Component
     public $banner_url;
     public $img_url;
     public $genres = [];
-    public $prevGenres = [];
-    public $allGenres = [];
-    public $selectedGenres = [];
 
     public $hasParent = 0;
     public $search = '';
@@ -34,6 +32,12 @@ class EditItem extends Component
         $this->type = $this->item->type;
         $this->banner_url = $this->item->banner_url;
         $this->img_url = $this->item->img_url;
+    }
+
+    #[On('genres-selected')] 
+    public function updateGenres($selectedGenres)
+    {
+        $this->genres = $selectedGenres;
     }
 
     public function update()
@@ -58,6 +62,7 @@ class EditItem extends Component
         }
 
         $this->item->update($saveItem);
+        $this->item->genres()->sync($this->genres);
 
         return $this->redirect('/');
     }

@@ -32,7 +32,7 @@
                 </div>
                 @if ($hasParent)
                     <div id='search' class="flex flex-row items-center gap-2" x-data="{ open: false }"
-                        @click.away="open = false">
+                        x-on:click.away="open = false">
                         <label for="search">De:</label>
                         <input type="text"
                             class="w-full relative p-2.5 text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
@@ -41,7 +41,7 @@
                             <ul class="absolute mt-1 border border-gray-300 rounded-md bg-white shadow-sm">
                                 @foreach ($items as $parent)
                                     <li class="text-zinc-700 cursor-pointer px-4 py-2 hover:bg-gray-100"
-                                        wire:click="selectParent({{ json_encode($parent) }})" @click="open = false">
+                                        wire:click="selectParent({{ json_encode($parent) }})" x-on:click="open = false">
                                         {{ $parent['name'] }}</li>
                                 @endforeach
                             </ul>
@@ -50,7 +50,7 @@
                 @endif
             </div>
             <div class="flex flex-col basis-1/2 px-8 py-6 gap-8">
-                <livewire:select-genres :item="$item" />
+                <livewire:select-genres :genres="$item->genres" />
                 <div>
                     <label for="img_url" class="block mb-1 text-sm font-medium text-white">URL da
                         capa</label>
