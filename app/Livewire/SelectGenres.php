@@ -28,10 +28,6 @@ class SelectGenres extends Component
         $this->genres = $this->prevGenres;
         $this->selectedGenres = $genres;
     }
-    public function render()
-    {
-        return view('livewire.select-genres');
-    }
 
     public function cancelSelect()
     {
@@ -58,5 +54,11 @@ class SelectGenres extends Component
         }
 
         $this->new_genre = '';
+    }
+
+
+    public function render()
+    {
+        return view('livewire.select-genres');
     }
 }

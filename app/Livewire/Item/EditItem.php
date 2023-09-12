@@ -77,11 +77,6 @@ class EditItem extends Component
         $this->search = $parent['name'];
     }
 
-    public function toggleHasParent()
-    {
-        $this->hasParent;
-    }
-
     public function render()
     {
         $items = $this->updatedSearch();

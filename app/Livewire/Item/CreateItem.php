@@ -21,6 +21,7 @@ class CreateItem extends Component
     public $img_url = '';
     public $banner_url = '';
     public $year = 0;
+    public $episodes = 0;
 
     public $genres = [];
     public $allGenres = [];
@@ -30,6 +31,9 @@ class CreateItem extends Component
     public $hasParent = false;
     public $search = '';
     public $parentId = null;
+
+    public $selectedType;
+    public $hasEpisodes = false;
 
     public function mount()
     {
@@ -43,16 +47,20 @@ class CreateItem extends Component
     {
         $saveItem = [
             'name' => $this->name,
-            'description' => $this->description,
-            'year' => $this->year,
+            'description' => $this->description ? $this->description : null,
+            'year' => $this->year ? $this->year : null,
             'type_id' => $this->type_id,
-            'banner_url' => $this->banner_url,
-            'img_url' => $this->img_url
+            'banner_url' => $this->banner_url ? $this->banner_url : null,
+            'img_url' => $this->img_url ? $this->img_url : null
         ];
 
 
         if ($this->hasParent && isset($this->parentId)) {
             $saveItem['parent_id'] = $this->parentId;
+        }
+
+        if ($this->hasEpisodes && $this->episodes > 0) {
+            $saveItem['episodes'] = $this->episodes;
         }
 
         $newItem = Item::create($saveItem);
@@ -102,9 +110,20 @@ class CreateItem extends Component
         $this->search = $parent['name'];
     }
 
-    public function toggleHasParent()
+    public function updated($propertyName)
     {
-        $this->hasParent;
+        if ($propertyName === 'type_id') {
+            $this->selectedType = Type::find($this->type_id);
+
+            $handler = $this->selectedType->handler;
+            if ($handler == 'serie' || $handler == 'anime' || $handler == 'cartoon') {
+                $this->hasEpisodes = true;
+            } else {
+                $this->hasEpisodes = false;
+            }
+            
+            $this->episodes = 0;
+        }
     }
     public function render()
     {
@@ -114,7 +133,7 @@ class CreateItem extends Component
             'livewire.create-item',
             [
                 'options' => Type::all(),
-                'items' => $items
+                'items' => $items,
             ]
         );
     }
