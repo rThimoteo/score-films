@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Livewire\GenreControl;
 use App\Livewire\Item\EditItem;
 use App\Livewire\Item\CreateItem;
 use App\Livewire\Item\ShowItem;
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
   Route::get('/items/{id}/edit', EditItem::class);
 
   Route::resource('items', 'App\Http\Controllers\ItemController');
+
+  Route::get('/genres', GenreControl::class);
 
   Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');
 });
