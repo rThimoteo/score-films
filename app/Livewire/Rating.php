@@ -136,6 +136,11 @@ class Rating extends Component
         }
     }
 
+    public function invertSharedScore()
+    {
+        $this->score_compartilhado = !$this->score_compartilhado;
+    }
+
     public function render()
     {
         return view('livewire.rating', [

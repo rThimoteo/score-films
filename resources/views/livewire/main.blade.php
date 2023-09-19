@@ -1,5 +1,5 @@
 <div>
-    <div class="flex justify-end px-10 pt-4 pb-2" x-data="{ open: true }">
+    <div class="flex justify-end px-10 pt-4 pb-2" x-data="{ open: false }">
         <button x-on:click="open = true" class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-lg"
             type="button">Filtros</button>
 
