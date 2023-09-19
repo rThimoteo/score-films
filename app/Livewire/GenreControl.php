@@ -2,9 +2,8 @@
 
 namespace App\Livewire;
 
-require_once __DIR__ .'/../helpers.php';
-
 use App\Models\Genre;
+use App\Utils\Helper;
 use Livewire\Component;
 
 class GenreControl extends Component
@@ -41,7 +40,7 @@ class GenreControl extends Component
     public function addGenre()
     {
         if (!empty($this->newGenre)) {
-            $addedGenre = Genre::firstOrCreate(['name' => $this->newGenre, 'handler' => formatText($this->newGenre)]);
+            $addedGenre = Genre::firstOrCreate(['name' => $this->newGenre, 'handler' => Helper::formatText($this->newGenre)]);
             $this->genres[$addedGenre->id] = $this->newGenre;
             $this->newGenre = '';
         }

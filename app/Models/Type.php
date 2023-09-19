@@ -10,6 +10,7 @@ class Type extends Model
     const FILME = 'movie';
     const SERIE = 'serie';
     const ANIME = 'anime';
+    const DESENHO = 'cartoon';
 
     public $timestamps = false;
 }
