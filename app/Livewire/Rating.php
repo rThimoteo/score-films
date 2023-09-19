@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Item;
 use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,6 +19,9 @@ class Rating extends Component
     public $status_id = 1;
     public $selectedStatus;
     public $hasFinishDate = false;
+    public $hasEpisodes = false;
+    public $episodes = null;
+    public $totalEpisodes = null;
 
     //Variável para definir se o score será compartilhado entre os usuários
     public $score_compartilhado = true;
@@ -54,6 +58,18 @@ class Rating extends Component
         } else {
             $this->date = Carbon::now()->format('d/m/Y');
         }
+
+        $item = Item::find($this->item_id);
+
+        if ($item) {
+            if (isset($item->episodes) && $item->episodes > 0) {
+                $this->hasEpisodes = true;
+                $this->totalEpisodes = $item->episodes;
+            } else {
+                $this->hasEpisodes = false;
+                $this->totalEpisodes = null;
+            }
+        }
     }
 
     public function rate($rating)
@@ -81,14 +97,10 @@ class Rating extends Component
         $itemRating = [
             'score' => $this->score,
             'comment' => $this->comment,
-            'status_id' => $this->status_id
+            'status_id' => $this->status_id,
+            'actual_episode' => $this->hasEpisodes ? $this->episodes : null,
+            'date' => $this->hasFinishDate ? Carbon::createFromFormat('d/m/Y', $this->date)->toDateString() : null
         ];
-
-        if ($this->hasFinishDate) {
-            $itemRating['date'] = Carbon::createFromFormat('d/m/Y', $this->date)->toDateString();
-        } else {
-            $itemRating['date'] = null;
-        }
 
         if ($this->score_compartilhado) {
             User::all()->map(function ($user) use ($itemRating) {
@@ -114,6 +126,10 @@ class Rating extends Component
                 $this->hasFinishDate = true;
             } else {
                 $this->hasFinishDate = false;
+            }
+
+            if ($handler == 'done') {
+                $this->episodes = $this->totalEpisodes;
             }
 
             $this->date = Carbon::now()->format('d/m/Y');

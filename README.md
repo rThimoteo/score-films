@@ -1,4 +1,3 @@
--adicionar episódios, total e vistos
 -adicionar crud universo
 -fazer uma tela main para universos
 -permitir adicionar e remover itens de universo

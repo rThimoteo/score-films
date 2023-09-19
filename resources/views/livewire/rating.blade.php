@@ -8,9 +8,20 @@
                     <option value="{{ $option['id'] }}">{{ $option['name'] }}</option>
                 @endforeach
             </select>
+
+            @if ($hasEpisodes)
+                <label for="episodes" class="mt-2 mb-1 block text-sm font-medium text-white">Episódio Atual</label>
+                <div class="flex items-center gap-1">
+                    <input name="episodes" wire:model.live="episodes" type="number"
+                        class="text-end block p-1.5 w-16 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" />
+                    <span class="text-2xl text-white font-bold">/ {{ $totalEpisodes }}</span>
+                </div>
+            @endif
+
             @if ($hasFinishDate)
+            <label for="date" class="mt-2 mb-1 block text-sm font-medium text-white">Data de Conclusão</label>
                 <input name="date" wire:model="date" format="DD/MM/YYYY" placeholder="DD/MM/YYYY"
-                    class="my-2 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" />
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" />
             @endif
         </div>
         <div class="rating flex flex-row mt-2">
@@ -29,7 +40,7 @@
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 placeholder="Diga o que achou..."></textarea>
 
-            <div class="flex justify-end">
+            <div class="mt-3 flex justify-end">
                 <button type="submit"
                     class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Salvar</button>
             </div>
