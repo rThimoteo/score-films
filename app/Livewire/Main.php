@@ -122,6 +122,7 @@ class Main extends Component
   public function updateSearch($filter)
   {
     $this->name_filter = $filter;
+    $this->items = $this->listItems();
   }
 
   public function render()

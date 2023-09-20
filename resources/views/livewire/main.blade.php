@@ -91,7 +91,7 @@
                 background-repeat: no-repeat;
                 background-size: cover;
               ">
-                <div class="flex justify-between pt-1 px-2 items-center">
+                <div class="flex justify-between pt-1 px-2 items-center relative bg-gradient-to-b from-zinc-950/50 from-50% min-h-[40px]">
                     <div>
                         @if (isset($item->status))
                             @switch($item->status)
@@ -121,6 +121,9 @@
                         @endif
                     </div>
 
+                    @if(isset($item->users->first()->pivot->is_favorite) && $item->users->first()->pivot->is_favorite)
+                        <x-fas-medal class="text-white w-12 absolute left-0 right-0 mx-auto top-0 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" />
+                    @endif
                     <div class="flex justify-end">
                         @if (isset($item->users->first()->pivot->score) && $item->users->first()->pivot->score > 0)
                             <span
