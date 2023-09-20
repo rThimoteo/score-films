@@ -6,21 +6,41 @@ use App\Models\Genre;
 use App\Models\Item;
 use App\Models\Status;
 use App\Models\Type;
+use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Main extends Component
 {
   public $catalog;
-  public $name_filter;
+
+  public $items = [];
 
   public $genres = [];
   public $allGenres = [];
-  public $selectedGenres = [];
+  public $statuses= [];
+
+  public $score_filter;
+  public $name_filter;
+  public $status_filter;
+
+  public $month;
+  public $year;
+  public $validYears = [];
+  public $firstYear = 2020;
 
   public function mount($type = null)
   {
     $this->catalog = $type;
     $this->allGenres = Genre::all();
+    $this->statuses = Status::all();
+
+    $this->items = $this->listItems();
+
+    while ($this->firstYear <= Carbon::now()->year) {
+      $this->validYears[] = $this->firstYear;
+      $this->firstYear++;
+    }
   }
 
   public function listItems()
@@ -43,14 +63,30 @@ class Main extends Component
       $query->where('type_id', $type_id);
     }
 
-    if ($this->name_filter !== null) {
+    if ($this->name_filter != null) {
       $query->where('name', 'like', '%' . $this->name_filter . '%');
     }
 
-    if (!empty($this->selectedGenres)) {
+    if (!empty($this->genres)) {
       $query->whereHas('genres', function ($query) {
-        $query->whereIn('genre_id', $this->selectedGenres);
+        $query->whereIn('genre_id', $this->genres);
       });
+    }
+
+    if ($this->status_filter != null) {
+      $query->where('status_id', $this->status_filter);
+    }
+
+    if ($this->score_filter != null) {
+      $query->where('score', '=', $this->score_filter);
+    }
+
+    if ($this->month != null) {
+      $query->whereMonth('date', $this->month);
+    }
+
+    if ($this->year != null) {
+      $query->whereYear('date', $this->year);      
     }
 
     $tempItems = $query->get();
@@ -65,22 +101,34 @@ class Main extends Component
     return $tempItems;
   }
 
-  public function cancelSelect()
+  public function cancelFilters()
   {
-    $this->genres = $this->selectedGenres;
+    $this->genres = [];
+    $this->name_filter = null;
+    $this->status_filter = null;
+    $this->score_filter = null;
+    $this->month = null;
+    $this->year = null;
+
+    $this->items = $this->listItems();
   }
 
-  public function confirmGenres()
+  public function confirmFilter()
   {
-    $this->selectedGenres = $this->genres;
+    $this->items = $this->listItems();
+  }
+
+  #[On('filter-updated')]
+  public function updateSearch($filter)
+  {
+    $this->name_filter = $filter;
+    $this->items = $this->listItems();
   }
 
   public function render()
   {
-    $items = $this->listItems();
-
     return view('livewire.main', [
-      'items' => $items,
+      'items' => $this->items,
     ]);
   }
 }

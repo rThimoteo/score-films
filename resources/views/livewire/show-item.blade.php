@@ -20,18 +20,21 @@
                     type="button" wire:click="parentItem"><x-fas-arrow-left
                         class="w-3" />{{ $prevString }}</button>
                 <h2 class="text-3xl text-white font-bold mb-3">{{ $item->name }}</h2>
-                <p class="text-gray-300">{{ $item->type->name }} @if ($item->year)
-                        - ({{ $item->year }})
-                    @endif
-                </p>
-                <div class="flex flex-row gap-2 text-sm mb-4">
-                    @foreach ($item->genres as $genre)
-                        <span class="text-gray-300">{{ $genre->name }}</span>
-                    @endforeach
+                <div class="flex flex-col">
+                    <p class="text-gray-300">{{ $item->type->name }} @if ($item->year)
+                            - ({{ $item->year }})
+                        @endif
+                    </p>
+                    <div class="flex flex-row gap-2 text-sm mb-4">
+                        @foreach ($item->genres as $genre)
+                            <span class="text-gray-300">{{ $genre->name }}</span>
+                        @endforeach
+                    </div>
                 </div>
-                <span class="text-gray-300 mb-0">Sinopse</span>
-                <p class="text-gray-300 text-sm mb-3">{{ $item->description }}</p>
-
+                @if (strlen($item->description) > 0)
+                    <span class="text-gray-300 mb-0">Sinopse</span>
+                    <p class="text-gray-300 text-sm mb-3">{{ $item->description }}</p>
+                @endif
                 <div class="flex justify-start gap-3">
                     <a href="/items/{{ $item['id'] }}/edit"
                         class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

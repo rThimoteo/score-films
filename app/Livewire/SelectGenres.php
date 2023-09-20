@@ -11,14 +11,10 @@ class SelectGenres extends Component
     public $prevGenres = [];
     public $allGenres = [];
     public $selectedGenres = [];
-    public $item = null;
     public $new_genre = '';
 
-    public function mount($item)
+    public function mount($genres)
     {
-        $genres = $item->genres;
-        $this->item = $item;
-
         $this->allGenres = Genre::all();
 
         foreach ($genres as $genre) {
@@ -27,10 +23,6 @@ class SelectGenres extends Component
 
         $this->genres = $this->prevGenres;
         $this->selectedGenres = $genres;
-    }
-    public function render()
-    {
-        return view('livewire.select-genres');
     }
 
     public function cancelSelect()
@@ -46,7 +38,7 @@ class SelectGenres extends Component
 
         $this->selectedGenres = $filteredGenres;
 
-        $this->item->genres()->sync($this->genres);
+        $this->dispatch('genres-selected', selectedGenres: $this->genres);
     }
 
     public function createGenre()
@@ -58,5 +50,11 @@ class SelectGenres extends Component
         }
 
         $this->new_genre = '';
+    }
+
+
+    public function render()
+    {
+        return view('livewire.select-genres');
     }
 }

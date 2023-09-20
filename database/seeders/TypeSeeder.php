@@ -15,10 +15,6 @@ class TypeSeeder extends Seeder
     {
         $types = [
             [
-                'name' => 'Jogo',
-                'handler' => Type::JOGO
-            ],
-            [
                 'name' => 'Filme',
                 'handler' => Type::FILME
             ],
@@ -29,6 +25,14 @@ class TypeSeeder extends Seeder
             [
                 'name' => 'Anime',
                 'handler' => Type::ANIME
+            ],
+            [
+                'name' => 'Jogo',
+                'handler' => Type::JOGO
+            ],
+            [
+                'name' => 'Desenho',
+                'handler' => Type::DESENHO
             ]
         ];
 

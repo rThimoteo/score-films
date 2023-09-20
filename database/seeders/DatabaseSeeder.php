@@ -12,13 +12,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UserSeeder::class,
-            TypeSeeder::class,
-            StatusSeeder::class,
-            GenreSeeder::class,
-            ItemSeeder::class,
-            StarWarsSeeder::class,
-        ]);
+        if (app()->environment('local', 'development')) {
+            // Seeders para ambiente de desenvolvimento
+            $this->call([
+                UserSeeder::class,
+                TypeSeeder::class,
+                StatusSeeder::class,
+                GenreSeeder::class,
+                ItemSeeder::class,
+                StarWarsSeeder::class,
+            ]);
+        } else {
+            // Seeders para ambiente de produção
+            $this->call([
+                UserSeeder::class,
+                TypeSeeder::class,
+                StatusSeeder::class,
+                GenreSeeder::class,
+            ]);
+        }
     }
 }

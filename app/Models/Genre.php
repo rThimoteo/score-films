@@ -10,4 +10,9 @@ class Genre extends Model
         'name',
         'handler',
     ];
+
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'item_genre', 'genre_id', 'item_id')->withTimestamps();
+    }
 }

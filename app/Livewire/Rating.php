@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Item;
 use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,6 +17,11 @@ class Rating extends Component
     public $comment = '';
     public $date = '';
     public $status_id = 1;
+    public $selectedStatus;
+    public $hasFinishDate = false;
+    public $hasEpisodes = false;
+    public $episodes = null;
+    public $totalEpisodes = null;
 
     //Variável para definir se o score será compartilhado entre os usuários
     public $score_compartilhado = true;
@@ -36,6 +42,12 @@ class Rating extends Component
             }
             if ($data->status_id) {
                 $this->status_id = $data->status_id;
+                $this->selectedStatus = Status::find($data->status_id);
+
+                $handler = $this->selectedStatus->handler;
+                if ($handler == 'done' || $handler == 'dropped') {
+                    $this->hasFinishDate = true;
+                }
             }
             if ($data->score) {
                 $this->score = $data->score;
@@ -45,6 +57,18 @@ class Rating extends Component
             }
         } else {
             $this->date = Carbon::now()->format('d/m/Y');
+        }
+
+        $item = Item::find($this->item_id);
+
+        if ($item) {
+            if (isset($item->episodes) && $item->episodes > 0) {
+                $this->hasEpisodes = true;
+                $this->totalEpisodes = $item->episodes;
+            } else {
+                $this->hasEpisodes = false;
+                $this->totalEpisodes = null;
+            }
         }
     }
 
@@ -63,12 +87,6 @@ class Rating extends Component
         $this->temp_score = 0;
     }
 
-    public function render()
-    {
-        return view('livewire.rating', [
-            'options' => Status::all()
-        ]);
-    }
 
     public function save()
     {
@@ -76,27 +94,57 @@ class Rating extends Component
             $this->score = null;
         }
 
+        $itemRating = [
+            'score' => $this->score,
+            'comment' => $this->comment,
+            'status_id' => $this->status_id,
+            'actual_episode' => $this->hasEpisodes ? $this->episodes : null,
+            'date' => $this->hasFinishDate ? Carbon::createFromFormat('d/m/Y', $this->date)->toDateString() : null
+        ];
+
         if ($this->score_compartilhado) {
-            User::all()->map(function ($user) {
+            User::all()->map(function ($user) use ($itemRating) {
                 $user->items()->syncWithoutDetaching([
-                    $this->item_id => [
-                        'score' => $this->score,
-                        'comment' => $this->comment,
-                        'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
-                        'status_id' => $this->status_id
-                    ]
+                    $this->item_id => $itemRating
                 ]);
             });
         } else {
             auth()->user()->items()->syncWithoutDetaching([
-                $this->item_id => [
-                    'score' => $this->score,
-                    'comment' => $this->comment,
-                    'date' => Carbon::createFromFormat('d/m/Y', $this->date)->toDateString(),
-                    'status_id' => $this->status_id
-                ]
+                $this->item_id => $itemRating
             ]);
         }
         return $this->redirect('/');
+    }
+
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'status_id') {
+            $this->selectedStatus = Status::find($this->status_id);
+
+            $handler = $this->selectedStatus->handler;
+            if ($handler == 'done' || $handler == 'dropped') {
+                $this->hasFinishDate = true;
+            } else {
+                $this->hasFinishDate = false;
+            }
+
+            if ($handler == 'done') {
+                $this->episodes = $this->totalEpisodes;
+            }
+
+            $this->date = Carbon::now()->format('d/m/Y');
+        }
+    }
+
+    public function invertSharedScore()
+    {
+        $this->score_compartilhado = !$this->score_compartilhado;
+    }
+
+    public function render()
+    {
+        return view('livewire.rating', [
+            'options' => Status::all()
+        ]);
     }
 }
