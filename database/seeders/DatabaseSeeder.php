@@ -19,8 +19,7 @@ class DatabaseSeeder extends Seeder
                 TypeSeeder::class,
                 StatusSeeder::class,
                 GenreSeeder::class,
-                ItemSeeder::class,
-                StarWarsSeeder::class,
+                OldItemsSeeder::class,
             ]);
         } else {
             // Seeders para ambiente de produção
@@ -29,6 +28,7 @@ class DatabaseSeeder extends Seeder
                 TypeSeeder::class,
                 StatusSeeder::class,
                 GenreSeeder::class,
+                OldItemsSeeder::class,
             ]);
         }
     }
