@@ -99,7 +99,13 @@ class Main extends Component
       $query->whereYear('date', $this->year);      
     }
 
-    $tempItems = $query->get();
+    $tempItems = collect();
+
+    $query->chunk(20, function ($items) use ($tempItems) {
+        $tempItems->push($items);
+    });
+    
+    $tempItems = $tempItems->flatten();
 
     return $tempItems;
   }
