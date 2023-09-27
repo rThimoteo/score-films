@@ -1,3 +1,4 @@
+-input de pesquisa condicional
 -adicionar crud universo
 -fazer uma tela para universos
 -permitir adicionar e remover itens de universo
