@@ -55,7 +55,17 @@ class Main extends Component
         $join->on('items.id', '=', 'user_item.item_id')
           ->where('user_item.user_id', '=', $user->id);
       })
-      ->select('items.*', 'user_item.date', 'user_item.score')
+      ->leftJoin('statuses', 'user_item.status_id', '=', 'statuses.id')
+      ->select('items.*', 'user_item.date', 'user_item.score', 'statuses.handler as status')
+      ->orderByRaw("
+        CASE
+            WHEN statuses.handler = 'consuming' THEN 1
+            WHEN statuses.handler = 'priority' THEN 2
+            WHEN statuses.handler = 'done' THEN 3
+            WHEN statuses.handler = 'todo' THEN 4
+            ELSE 5
+        END
+    ")
       ->orderBy('user_item.date', 'desc');
 
     if ($this->catalog !== null) {
@@ -90,13 +100,6 @@ class Main extends Component
     }
 
     $tempItems = $query->get();
-
-    foreach ($tempItems as $item) {
-      if (isset($item->users->first()->pivot)) {
-        $statusId = $item->users->first()->pivot->status_id;
-        $item['status'] = Status::find($statusId)->handler;
-      }
-    }
 
     return $tempItems;
   }
