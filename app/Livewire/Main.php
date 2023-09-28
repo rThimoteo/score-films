@@ -36,6 +36,8 @@ class Main extends Component
     $this->statuses = Status::all();
 
     $this->items = $this->listItems();
+    
+    $this->dispatch('show-filter', show: true);
 
     while ($this->firstYear <= Carbon::now()->year) {
       $this->validYears[] = $this->firstYear;
@@ -74,7 +76,7 @@ class Main extends Component
     }
 
     if ($this->name_filter != null) {
-      $query->where('name', 'like', '%' . $this->name_filter . '%');
+      $query->where('items.name', 'like', '%' . $this->name_filter . '%');
     }
 
     if (!empty($this->genres)) {
