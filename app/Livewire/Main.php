@@ -43,6 +43,12 @@ class Main extends Component
       $this->validYears[] = $this->firstYear;
       $this->firstYear++;
     }
+
+    if ($type !== null) {
+      $this->dispatch('set-category', category: $type);
+    } else {
+      $this->dispatch('set-category', category: 'all');
+    }
   }
 
   public function listItems()
