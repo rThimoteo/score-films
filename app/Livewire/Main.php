@@ -36,10 +36,18 @@ class Main extends Component
     $this->statuses = Status::all();
 
     $this->items = $this->listItems();
+    
+    $this->dispatch('show-filter', show: true);
 
     while ($this->firstYear <= Carbon::now()->year) {
       $this->validYears[] = $this->firstYear;
       $this->firstYear++;
+    }
+
+    if ($type !== null) {
+      $this->dispatch('set-category', category: $type);
+    } else {
+      $this->dispatch('set-category', category: 'all');
     }
   }
 
@@ -55,7 +63,17 @@ class Main extends Component
         $join->on('items.id', '=', 'user_item.item_id')
           ->where('user_item.user_id', '=', $user->id);
       })
-      ->select('items.*', 'user_item.date', 'user_item.score')
+      ->leftJoin('statuses', 'user_item.status_id', '=', 'statuses.id')
+      ->select('items.*', 'user_item.date', 'user_item.score', 'statuses.handler as status')
+      ->orderByRaw("
+        CASE
+            WHEN statuses.handler = 'consuming' THEN 1
+            WHEN statuses.handler = 'priority' THEN 2
+            WHEN statuses.handler = 'done' THEN 3
+            WHEN statuses.handler = 'todo' THEN 4
+            ELSE 5
+        END
+    ")
       ->orderBy('user_item.date', 'desc');
 
     if ($this->catalog !== null) {
@@ -64,7 +82,7 @@ class Main extends Component
     }
 
     if ($this->name_filter != null) {
-      $query->where('name', 'like', '%' . $this->name_filter . '%');
+      $query->where('items.name', 'like', '%' . $this->name_filter . '%');
     }
 
     if (!empty($this->genres)) {
@@ -89,14 +107,13 @@ class Main extends Component
       $query->whereYear('date', $this->year);      
     }
 
-    $tempItems = $query->get();
+    $tempItems = collect();
 
-    foreach ($tempItems as $item) {
-      if (isset($item->users->first()->pivot)) {
-        $statusId = $item->users->first()->pivot->status_id;
-        $item['status'] = Status::find($statusId)->handler;
-      }
-    }
+    $query->chunk(20, function ($items) use ($tempItems) {
+        $tempItems->push($items);
+    });
+    
+    $tempItems = $tempItems->flatten();
 
     return $tempItems;
   }
