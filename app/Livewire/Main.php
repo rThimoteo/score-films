@@ -15,6 +15,10 @@ class Main extends Component
   public $catalog;
 
   public $items = [];
+  public $page = 1;
+  public $perPage = 20;
+  public $hasMoreItems = true;
+  public $isLoadingMore = false;
 
   public $genres = [];
   public $allGenres = [];
@@ -35,7 +39,7 @@ class Main extends Component
     $this->allGenres = Genre::all();
     $this->statuses = Status::all();
 
-    $this->items = $this->listItems();
+    $this->resetListing();
     
     $this->dispatch('show-filter', show: true);
 
@@ -51,7 +55,7 @@ class Main extends Component
     }
   }
 
-  public function listItems()
+  protected function buildItemsQuery()
   {
     $user = auth()->user();
 
@@ -107,15 +111,50 @@ class Main extends Component
       $query->whereYear('date', $this->year);      
     }
 
-    $tempItems = collect();
+    return $query;
+  }
 
-    $query->chunk(20, function ($items) use ($tempItems) {
-        $tempItems->push($items);
-    });
-    
-    $tempItems = $tempItems->flatten();
+  public function listItems($append = false)
+  {
+    $items = $this->buildItemsQuery()
+      ->skip(($this->page - 1) * $this->perPage)
+      ->take($this->perPage)
+      ->get();
 
-    return $tempItems;
+    $this->hasMoreItems = $items->count() === $this->perPage;
+
+    if ($append) {
+      $this->items = collect($this->items)
+        ->concat($items)
+        ->values()
+        ->all();
+
+      $this->isLoadingMore = false;
+
+      return;
+    }
+
+    $this->items = $items->all();
+    $this->isLoadingMore = false;
+  }
+
+  public function resetListing()
+  {
+    $this->page = 1;
+    $this->hasMoreItems = true;
+    $this->isLoadingMore = false;
+    $this->listItems();
+  }
+
+  public function loadMore()
+  {
+    if (!$this->hasMoreItems || $this->isLoadingMore) {
+      return;
+    }
+
+    $this->isLoadingMore = true;
+    $this->page++;
+    $this->listItems(true);
   }
 
   public function cancelFilters()
@@ -127,19 +166,19 @@ class Main extends Component
     $this->month = null;
     $this->year = null;
 
-    $this->items = $this->listItems();
+    $this->resetListing();
   }
 
   public function confirmFilter()
   {
-    $this->items = $this->listItems();
+    $this->resetListing();
   }
 
   #[On('filter-updated')]
   public function updateSearch($filter)
   {
     $this->name_filter = $filter;
-    $this->items = $this->listItems();
+    $this->resetListing();
   }
 
   public function render()

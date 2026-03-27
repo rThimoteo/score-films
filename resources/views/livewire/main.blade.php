@@ -138,9 +138,25 @@
                 </div>
             </a>
         @endforeach
-        <div wire:loading class="my-auto">
+        <div wire:loading class="my-auto" wire:target="loadMore,confirmFilter,cancelFilters,updateSearch">
             <x-fas-circle-notch class="mx-auto animate-spin w-10 text-sky-800" />
             <span class="mx-auto text-white">Carregando...</span>
         </div>
     </div>
+    @if ($hasMoreItems)
+        <div class="flex justify-center py-6"
+            x-data="{ observer: null }"
+            x-init="
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            $wire.loadMore();
+                        }
+                    });
+                }, { rootMargin: '300px 0px' });
+                observer.observe($el);
+            "
+            x-on:destroy="observer && observer.disconnect()">
+        </div>
+    @endif
 </div>

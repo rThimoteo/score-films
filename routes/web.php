@@ -5,6 +5,7 @@ use App\Livewire\GenreControl;
 use App\Livewire\Item\EditItem;
 use App\Livewire\Item\CreateItem;
 use App\Livewire\Item\ShowItem;
+use App\Livewire\UniverseControl;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Main;
 
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
   Route::resource('items', 'App\Http\Controllers\ItemController');
 
   Route::get('/genres', GenreControl::class);
+  Route::get('/universes', UniverseControl::class);
 
   Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');
 });

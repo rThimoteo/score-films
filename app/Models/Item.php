@@ -46,4 +46,9 @@ class Item extends Model
     {
         return $this->hasOne(Item::class, 'parent_id');
     }
+
+    public function universe()
+    {
+        return $this->belongsTo(Universe::class);
+    }
 }
