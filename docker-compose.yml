@@ -20,7 +20,7 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pass
     ports:
-      - '33066:3306'
+      - '33068:3306'
     networks:
       - score-films
 
@@ -32,7 +32,7 @@ services:
       - '.:/application'
       - './docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
     ports:
-      - '8080:80'
+      - '8082:80'
     networks:
       - score-films
     depends_on:

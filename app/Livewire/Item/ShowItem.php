@@ -13,7 +13,7 @@ class ShowItem extends Component
 
     public function mount($id)
     {
-        $this->item = Item::where('id', $id)->with(['genres', 'parent', 'child', 'type'])->first();
+        $this->item = Item::where('id', $id)->with(['genres', 'parent', 'child', 'type', 'universe.items'])->first();
 
         switch ($this->item->type->handler) {
             case 'game':

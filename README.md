@@ -59,13 +59,8 @@ npm run dev
 ```
 6. Acesse o projeto no navegador através do endereço:
 ```bash
-http://localhost:8080
+http://localhost:8082
 ```
 
 ## Próximas Features
-- Adicionar universos. (Universos são agrupamentos de itens, que fazem referência ao mesmo conteúdo)
-- Fazer uma tela para universos.
-- Permitir adicionar e remover itens de universo.
-- Mostrar o universo nos detalhes do item.
-- Configurar seeders para produção/desenvolvimento.
 - Exportar lista pelo excel.

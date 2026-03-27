@@ -11,14 +11,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
-                    <label for="type_id" class="block mb-1 text-sm font-medium text-white">Nota Compartilhada</label>
-                    @if ($score_compartilhado)
-                        <x-fas-toggle-on wire:click="invertSharedScore()" class="w-8 text-green-500 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" />
-                    @else
-                        <x-fas-toggle-off wire:click="invertSharedScore()" class="w-8 text-red-600 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]" />
-                    @endif
-                </div>
             </div>
             @if ($hasEpisodes)
                 <label for="episodes" class="mt-2 mb-1 block text-sm font-medium text-white">Episódio Atual</label>

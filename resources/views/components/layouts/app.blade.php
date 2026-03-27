@@ -27,6 +27,11 @@
 
         <div class="flex items-center gap-3">
             <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300"
+                href="/universes" wire:navigate>
+                <x-fas-plus class="w-4" />
+                <span class="">Universos</span>
+            </a>
+            <a class="flex items-center gap-1 border-2 rounded-lg py-1 px-2 transition ease-in-out hover:scale-105 hover:text-white duration-300"
                 href="/item/create" wire:navigate>
                 <x-fas-plus class="w-4" />
                 <span class="">Adicionar</span>

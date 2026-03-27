@@ -31,6 +31,27 @@
                         @endforeach
                     </div>
                 </div>
+                @if ($item->universe)
+                    <div class="mb-4">
+                        <span class="mb-1 block text-gray-300">Universo</span>
+                        <a href="/universes" wire:navigate
+                            class="inline-flex rounded-full bg-violet-700 px-3 py-1 text-sm font-bold text-white transition hover:bg-violet-600">
+                            {{ $item->universe->name }}
+                        </a>
+                        @if ($item->universe->items->count() > 1)
+                            <div class="mt-2 flex flex-wrap gap-2 text-sm">
+                                @foreach ($item->universe->items as $universeItem)
+                                    @if ($universeItem->id !== $item->id)
+                                        <a href="/items/{{ $universeItem->id }}" wire:navigate
+                                            class="rounded-full border border-zinc-600 px-3 py-1 text-zinc-300 transition hover:border-violet-500 hover:text-white">
+                                            {{ $universeItem->name }}
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endif
                 @if (strlen($item->description) > 0)
                     <span class="text-gray-300 mb-0">Sinopse</span>
                     <p class="text-gray-300 text-sm mb-3">{{ $item->description }}</p>

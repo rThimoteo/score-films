@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Item;
 use App\Models\Status;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -22,9 +21,6 @@ class Rating extends Component
     public $hasEpisodes = false;
     public $episodes = null;
     public $totalEpisodes = null;
-
-    //Variável para definir se o score será compartilhado entre os usuários
-    public $score_compartilhado = true;
 
     public function mount($itemid = 0)
     {
@@ -102,17 +98,10 @@ class Rating extends Component
             'date' => $this->hasFinishDate ? Carbon::createFromFormat('d/m/Y', $this->date)->toDateString() : null
         ];
 
-        if ($this->score_compartilhado) {
-            User::all()->map(function ($user) use ($itemRating) {
-                $user->items()->syncWithoutDetaching([
-                    $this->item_id => $itemRating
-                ]);
-            });
-        } else {
-            auth()->user()->items()->syncWithoutDetaching([
-                $this->item_id => $itemRating
-            ]);
-        }
+        auth()->user()->items()->syncWithoutDetaching([
+            $this->item_id => $itemRating
+        ]);
+
         return $this->redirect('/');
     }
 
@@ -134,11 +123,6 @@ class Rating extends Component
 
             $this->date = Carbon::now()->format('d/m/Y');
         }
-    }
-
-    public function invertSharedScore()
-    {
-        $this->score_compartilhado = !$this->score_compartilhado;
     }
 
     public function render()

@@ -4,38 +4,52 @@ namespace Database\Seeders;
 
 use App\Models\Item;
 use App\Models\Type;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\Concerns\LoadsOptionalSeederData;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ItemSeeder extends Seeder
 {
+    use LoadsOptionalSeederData;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Item::firstOrCreate([
-            'name' => 'Sex Education',
-            'description' => 'Uma série que fala de sexo.',
-            'type_id' => Type::where('handler', 'serie')->first()->id
-        ]);
+        $this->seedItems();
+    }
 
-        Item::firstOrCreate([
-            'name' => 'Tales of Arise',
-            'description' => 'Melhor jogo de anime.',
-            'type_id' => Type::where('handler', 'game')->first()->id
-        ]);
+    private function seedItems(): void
+    {
+        $items = $this->loadOptionalSeederData('items.php');
 
-        Item::firstOrCreate([
-            'name' => 'Rua do Medo: 1994 - Parte 1',
-            'description' => 'Melhor filme do mundo, parte 1.',
-            'type_id' => Type::where('handler', 'movie')->first()->id
-        ]);
+        foreach ($items as $item) {
+            if (! isset($item['name'], $item['type_handler'])) {
+                continue;
+            }
 
-        Item::firstOrCreate([
-            'name' => 'Grand Blue',
-            'description' => 'Um dos animes de comédia já feitos',
-            'type_id' => Type::where('handler', 'anime')->first()->id
-        ]);
+            $typeId = Type::where('handler', $item['type_handler'])->value('id');
+
+            if (! $typeId) {
+                continue;
+            }
+
+            $createdItem = Item::firstOrCreate([
+                'name' => $item['name'],
+                'type_id' => $typeId,
+                'img_url' => $item['img_url']
+            ]);
+
+            if ($createdItem) {
+                DB::table('user_item')->insert([
+                    'user_id' => 1,
+                    'item_id' => $createdItem->id,
+                    'score' => $item['score'],
+                    'status_id' => $item['status'],
+                    'date' => $item['date'],
+                ]);
+            }
+        }
     }
 }
