@@ -3,27 +3,33 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\Concerns\LoadsOptionalSeederData;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    use LoadsOptionalSeederData;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        User::firstOrCreate([
-            'name' => 'Rodrigo',
-            'username' => 'rodrigo',
-            'password' => Hash::make('123@mudar')
-        ]);
+        $users = $this->loadOptionalSeederData('users.php');
 
-        User::firstOrCreate([
-            'name' => 'Gabriele',
-            'username' => 'gabi',
-            'password' => Hash::make('Ornitorrinco987!')
-        ]);
+        foreach ($users as $user) {
+            if (! isset($user['username'], $user['password'])) {
+                continue;
+            }
+
+            User::updateOrCreate(
+                ['username' => $user['username']],
+                [
+                    'name' => $user['name'] ?? $user['username'],
+                    'password' => Hash::make($user['password']),
+                ]
+            );
+        }
     }
 }
